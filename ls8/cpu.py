@@ -319,18 +319,43 @@ class CPU:
             value = register_a & register_b
             # Store in Reg A
             self.reg_write(reg_a, value)
+            
         elif op == "OR":
-            pass
+            # Bitwise-Or between val of REG A and REG B
+            value = register_a | register_b
+            # Store result in REG A
+            self.reg_write(reg_a, value)
+            
         elif op == "XOR":
-            pass
+            value = register_a ^ register_b
+            self.reg_write(reg_a, value)
+
         elif op == "NOT":
-            pass
+            # Perform a bitwise-NOT on the value in a register.
+            ~register_a
+
         elif op == "SHL":
-            pass
+            # shift the value in Reg A by the number of bits specified in register bits 
+            # filling the low bits with 0
+            register_a << reg_b
+
         elif op == "SHR":
-            pass
+            # shift the value in Reg A by the number of bits specified in register bits 
+            # filling the low bits with 0
+            register_a >> reg_b
+            
         elif op == "MOD":
-            pass
+            # if the val of register_b is 0 
+            if register_b == 0:
+                # Print error
+                print(f"Value of second register is 0, Cannot perform operation")
+                # Halt
+                self.HLT_handler()
+
+            # Divide the val in Register_a by the val in Register_b
+            remainder = register_a // register_b
+            # Store remainder in Reg_a
+            self.reg_write(reg_a, remainder)
         else:
             raise Exception("Unsupported ALU operation")
 
