@@ -46,10 +46,20 @@ class CPU:
         self.branchtable[0b01010100] = {'instruction_name' : 'JMP', 'retrieve': self.JMP_handler}
         self.branchtable[0b01010101] = {'instruction_name' : 'JEQ', 'retrieve': self.JEQ_handler}
         self.branchtable[0b01010110] = {'instruction_name' : 'JNE', 'retrieve': self.JNE_handler}
-        self.branchtable[0b10101000] = {'instruction_name': 'JNE', 'retrieve' : self.alu}
+        # ALU OPS
+        self.branchtable[0b10101000] = {'instruction_name': 'AND', 'retrieve' : self.alu}
+        self.branchtable[0b10101010] = {'instruction_name': 'OR', 'retrieve' : self.alu}
+        self.branchtable[0b10101011] = {'instruction_name': 'XOR', 'retrieve' : self.alu}
+        self.branchtable[0b01101001] = {'instruction_name': 'NOT', 'retrieve' : self.alu}
+        self.branchtable[0b10101100] = {'instruction_name': 'SHL', 'retrieve' : self.alu}
+        self.branchtable[0b10101101] = {'instruction_name': 'SHR', 'retrieve' : self.alu}
+        self.branchtable[0b10100100] = {'instruction_name': 'MOD', 'retrieve' : self.alu}
+
         self.E = 0
         self.L = 0
         self.G = 0
+
+
 
     
     def JMP_handler(self,a):
