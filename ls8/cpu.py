@@ -46,6 +46,7 @@ class CPU:
         self.branchtable[0b01010100] = {'instruction_name' : 'JMP', 'retrieve': self.JMP_handler}
         self.branchtable[0b01010101] = {'instruction_name' : 'JEQ', 'retrieve': self.JEQ_handler}
         self.branchtable[0b01010110] = {'instruction_name' : 'JNE', 'retrieve': self.JNE_handler}
+        self.branchtable[0b10101000] = {'instruction_name': 'JNE', 'retrieve' : self.alu}
         self.E = 0
         self.L = 0
         self.G = 0
@@ -257,9 +258,14 @@ class CPU:
 
     def alu(self, op):
         """ALU operations."""   
-        
+
+        ''' Register Addresses'''
         reg_a = self.ram_read(self.pc + 1)
         reg_b = self.ram_read(self.pc + 2)
+
+        ''' Register Values '''
+        register_a = self.reg_read(reg_a)
+        register_b = self.reg_read(reg_b)
         # print(f"self.reg_read(reg_a): {self.reg_read(self.pc + 1)} * self.reg_read(reg_b): ")
 
         if op == "ADD":
@@ -274,11 +280,7 @@ class CPU:
             self.reg_write(reg_a,value)
         elif op == "CMP":
             print(f"\n--Comparing--")
-            register_a = self.reg_read(reg_a)
-            register_b = self.reg_read(reg_b)
-
-            # gra
-            # Reg a == reg_b
+            # if Reg a == reg_b
             print(f"reg a: {reg_a}, reg_b: {reg_b}")
             if register_a == register_b:
                 # set the `E` Equal flag to 1
@@ -294,7 +296,6 @@ class CPU:
                 self.L = 1
                 self.G = 0
                 print(f"a == b, `L` flag is now {self.L}")
-
             # if reg_a > reg_b:
             elif register_a > register_b:
                 # set `G` flag to 1
@@ -303,8 +304,23 @@ class CPU:
                 self.L = 0
                 self.G = 1
                 print(f"a == b, `G` flag is now {self.G}")
-
-
+        elif op == "AND":
+            # Bitwise-AND Reg A & B 
+            value = register_a & register_b
+            # Store in Reg A
+            self.reg_write(reg_a, value)
+        elif op == "OR":
+            pass
+        elif op == "XOR":
+            pass
+        elif op == "NOT":
+            pass
+        elif op == "SHL":
+            pass
+        elif op == "SHR":
+            pass
+        elif op == "MOD":
+            pass
         else:
             raise Exception("Unsupported ALU operation")
 
