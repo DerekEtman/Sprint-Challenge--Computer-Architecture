@@ -9,9 +9,9 @@ import sys
 # HLT = 0b00000001
 # MUL = 10100010
 
-# - [ ] Add the `CMP` instruction and `equal` flag to your LS-8.
-# - [ ] Add the `JMP` instruction.
-# - [ ] Add the `JEQ` and `JNE` instructions.
+# - [x] Add the `CMP` instruction and `equal` flag to your LS-8.
+# - [x] Add the `JMP` instruction.
+# - [x] Add the `JEQ` and `JNE` instructions.
 
 
 
@@ -50,21 +50,30 @@ class CPU:
         self.L = 0
         self.G = 0
 
-    def CMP_handler(self,a):
-        # Handled by ALU
-        pass
     
     def JMP_handler(self,a):
-        self.pc += 2
-        pass
+        print(f"\n--JMP--")
+        # grab address from mem
+        address = self.ram_read(self.pc +1)
+        value = self.reg_read(address)
+        # Jump(set pc) to the address stored in reg
+        self.pc = value
 
     def JNE_handler(self,a):
-
-        self.pc += 2
-        pass
+        print(f"\n--JNE--")
+        # grab the address from mem
+        address = self.ram_read(self.pc +1)
+        value = self.reg_read(address)
+        # if `E` (equal) is false (0)
+        print(f"address: {address}, value: {value}")
+        if self.E == 0:
+            self.pc = value
+            # set jump(set pc) to address stored in reg
+        else:
+            self.pc += 2
 
     def JEQ_handler(self,a):
-        print(f"--Running JEQ--")
+        print(f"\n--Running JEQ--")
         address = self.ram_read(self.pc + 1)
         value = self.reg_read(address)
         print(f"address: {address}, value: {value}")
@@ -72,8 +81,9 @@ class CPU:
         # if `E` is true (1)
         if self.E == 1:
             # Jump to address
-            pass
-        self.pc += 2
+            self.pc = value
+        else:
+            self.pc += 2
 
     def load(self, filename):
         """Load a program into memory."""
@@ -253,17 +263,17 @@ class CPU:
         # print(f"self.reg_read(reg_a): {self.reg_read(self.pc + 1)} * self.reg_read(reg_b): ")
 
         if op == "ADD":
-            print(f"--ADD--")
+            print(f"\n--ADD--")
             self.reg[reg_a] += self.reg[reg_b]
         #elif op == "SUB": etc
 
         # Multiply the values in two registers together and store the result in registerA.
         elif op == "MUL":
-            print(f"--Multiplying--")
+            print(f"\n--Multiplying--")
             value = self.reg_read(reg_a) * self.reg_read(reg_b)
             self.reg_write(reg_a,value)
         elif op == "CMP":
-            print(f"--Comparing--")
+            print(f"\n--Comparing--")
             register_a = self.reg_read(reg_a)
             register_b = self.reg_read(reg_b)
 
