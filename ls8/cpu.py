@@ -55,13 +55,25 @@ class CPU:
         pass
     
     def JMP_handler(self,a):
+        self.pc += 2
         pass
 
     def JNE_handler(self,a):
+
+        self.pc += 2
         pass
 
     def JEQ_handler(self,a):
-        pass
+        print(f"--Running JEQ--")
+        address = self.ram_read(self.pc + 1)
+        value = self.reg_read(address)
+        print(f"address: {address}, value: {value}")
+        
+        # if `E` is true (1)
+        if self.E == 1:
+            # Jump to address
+            pass
+        self.pc += 2
 
     def load(self, filename):
         """Load a program into memory."""
@@ -263,6 +275,7 @@ class CPU:
                 self.E = 1
                 self.L = 0
                 self.G = 0
+                print(f"a == b, `E` flag is now {self.E}")
             # if reg_A < reg_B 
             elif register_a < register_b:
                 # set `L` flag to 1
@@ -270,6 +283,7 @@ class CPU:
                 self.E = 0
                 self.L = 1
                 self.G = 0
+                print(f"a == b, `L` flag is now {self.L}")
 
             # if reg_a > reg_b:
             elif register_a > register_b:
@@ -278,6 +292,7 @@ class CPU:
                 self.E = 0
                 self.L = 0
                 self.G = 1
+                print(f"a == b, `G` flag is now {self.G}")
 
 
         else:
