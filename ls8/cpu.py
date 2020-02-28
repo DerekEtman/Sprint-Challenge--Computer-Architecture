@@ -9,6 +9,10 @@ import sys
 # HLT = 0b00000001
 # MUL = 10100010
 
+# - [ ] Add the `CMP` instruction and `equal` flag to your LS-8.
+# - [ ] Add the `JMP` instruction.
+# - [ ] Add the `JEQ` and `JNE` instructions.
+
 
 
 class CPU:
@@ -38,10 +42,26 @@ class CPU:
         self.branchtable[0b01000110] = {'instruction_name' : 'POP', 'retrieve': self.pop_handler}
         self.branchtable[0b01010000] = {'instruction_name' : 'CALL', 'retrieve': self.CALL_handler}
         self.branchtable[0b00010001] = {'instruction_name' : 'RET', 'retrieve': self.RET_handler}
+        self.branchtable[0b10100111] = {'instruction_name' : 'CMP', 'retrieve': self.alu}
+        self.branchtable[0b01010100] = {'instruction_name' : 'JMP', 'retrieve': self.JMP_handler}
+        self.branchtable[0b01010101] = {'instruction_name' : 'JEQ', 'retrieve': self.JEQ_handler}
+        self.branchtable[0b01010110] = {'instruction_name' : 'JNE', 'retrieve': self.JNE_handler}
+        self.E = 0
+        self.L = 0
+        self.G = 0
 
+    def CMP_handler(self,a):
+        # Handled by ALU
+        pass
     
+    def JMP_handler(self,a):
+        pass
 
+    def JNE_handler(self,a):
+        pass
 
+    def JEQ_handler(self,a):
+        pass
 
     def load(self, filename):
         """Load a program into memory."""
@@ -230,6 +250,36 @@ class CPU:
             print(f"--Multiplying--")
             value = self.reg_read(reg_a) * self.reg_read(reg_b)
             self.reg_write(reg_a,value)
+        elif op == "CMP":
+            print(f"--Comparing--")
+            register_a = self.reg_read(reg_a)
+            register_b = self.reg_read(reg_b)
+
+            # gra
+            # Reg a == reg_b
+            print(f"reg a: {reg_a}, reg_b: {reg_b}")
+            if register_a == register_b:
+                # set the `E` Equal flag to 1
+                self.E = 1
+                self.L = 0
+                self.G = 0
+            # if reg_A < reg_B 
+            elif register_a < register_b:
+                # set `L` flag to 1
+                # Otherwise set to 0
+                self.E = 0
+                self.L = 1
+                self.G = 0
+
+            # if reg_a > reg_b:
+            elif register_a > register_b:
+                # set `G` flag to 1
+                # Otherwise set to 0
+                self.E = 0
+                self.L = 0
+                self.G = 1
+
+
         else:
             raise Exception("Unsupported ALU operation")
 
